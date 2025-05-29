@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindGames - Учим через игру</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
+        
+        body {
+            font-family: 'Nunito', sans-serif;
+            scroll-behavior: smooth;
+        }
+        
+        .hero-gradient {
+            background: linear-gradient(135deg, #8e2de2 0%, #4a00e0 100%);
+        }
+        
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .modal {
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        
+        .modal-content {
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+        }
+        
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal.active .modal-content {
+            transform: translateY(0);
+        }
+        
+        .faq-card {
+            transition: all 0.3s ease;
+        }
+        
+        .faq-card.active {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .nav-link::after {
+            content: '';
+            display: block;
+            width: 0;
+            height: 2px;
+            background: #4a00e0;
+            transition: width 0.3s;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-white shadow-sm">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center">
+                <div class="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold text-xl mr-2">
+                    MG
+                </div>
+                <span class="text-xl font-bold text-indigo-600">MindGames</span>
+            </div>
+            
+            <nav class="hidden md:flex space-x-8">
+                <a href="#about" class="nav-link font-medium">О школе</a>
+                <a href="#courses" class="nav-link font-medium">Курсы</a>
+                <a href="#features" class="nav-link font-medium">Возможности</a>
+                <a href="#faq" class="nav-link font-medium">Вопросы</a>
+                <a href="#contact" class="nav-link font-medium">Контакты</a>
+            </nav>
+            
+            <button onclick="openModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-full font-medium transition duration-300">
+                Войти
+            </button>
+            
+            <!-- Mobile menu button -->
+            <button id="mobile-menu-button" class="md:hidden text-gray-600">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+        </div>
+        
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white py-2 px-4 shadow-lg">
+            <div class="flex flex-col space-y-3">
+                <a href="#about" class="block py-2 font-medium">О школе</a>
+                <a href="#courses" class="block py-2 font-medium">Курсы</a>
+                <a href="#features" class="block py-2 font-medium">Возможности</a>
+                <a href="#faq" class="block py-2 font-medium">Вопросы</a>
+                <a href="#contact" class="block py-2 font-medium">Контакты</a>
+                <button onclick="openModal()" class="bg-indigo-600 text-white px-4 py-2 rounded-full font-medium mt-2">
+                    Войти
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="about" class="hero-gradient text-white py-16 md:py-24">
+        <div class="container mx-auto px-4 flex flex-col md:flex-row items-center">
+            <div class="md:w-1/2 mb-10 md:mb-0">
+                <h1 class="text-4xl md:text-5xl font-bold mb-4">Учим через игру</h1>
+                <h2 class="text-2xl md:text-3xl font-semibold mb-6">Квесты вместо скучных уроков</h2>
+                <p class="text-lg mb-8 opacity-90">
+                    MindGames — это интерактивная платформа для учеников 1–11 классов, где обучение превращается в увлекательное приключение. 
+                    Никаких скучных лекций и домашних заданий — только интересные квесты, достижения и прогресс!
+                </p>
+                <div class="flex space-x-4">
+                    <button onclick="openModal()" class="bg-white text-indigo-600 hover:bg-gray-100 px-6 py-3 rounded-full font-bold transition duration-300">
+                        Начать обучение
+                    </button>
+                    <a href="#courses" class="border-2 border-white text-white hover:bg-white hover:text-indigo-600 px-6 py-3 rounded-full font-bold transition duration-300">
+                        Наши курсы
+                    </a>
+                </div>
+            </div>
+            <div class="md:w-1/2 flex justify-center">
+                <div class="relative w-full max-w-md">
+                    <div class="absolute -top-6 -left-6 w-24 h-24 rounded-full bg-yellow-400 opacity-20"></div>
+                    <div class="absolute -bottom-6 -right-6 w-32 h-32 rounded-full bg-green-400 opacity-20"></div>
+                    <div class="relative bg-white rounded-xl shadow-xl p-4">
+                        <div class="bg-gray-100 rounded-lg p-4 mb-4">
+                            <div class="flex items-center mb-2">
+                                <div class="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold mr-2">
+                                    L1
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-4">
+                                    <div class="bg-indigo-600 h-4 rounded-full" style="width: 45%"></div>
+                                </div>
+                            </div>
+                            <h3 class="font-bold text-gray-800">Квест: "Тайна древнего храма"</h3>
+                            <p class="text-sm text-gray-600">Математика 5 класс</p>
+                        </div>
+                        <div class="bg-indigo-600 text-white rounded-lg p-4">
+                            <h3 class="font-bold mb-2">Выберите действие:</h3>
+                            <div class="space-y-2">
+                                <div class="bg-indigo-700 hover:bg-indigo-800 px-3 py-2 rounded-lg cursor-pointer transition duration-200">
+                                    Исследовать храм (решить уравнение)
+                                </div>
+                                <div class="bg-indigo-700 hover:bg-indigo-800 px-3 py-2 rounded-lg cursor-pointer transition duration-200">
+                                    Поговорить с жрецом (изучить теорию)
+                                </div>
+                                <div class="bg-indigo-700 hover:bg-indigo-800 px-3 py-2 rounded-lg cursor-pointer transition duration-200">
+                                    Открыть сундук (практическое задание)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex justify-between mt-4">
+                            <div class="flex items-center text-gray-600">
+                                <i class="fas fa-coins text-yellow-500 mr-1"></i>
+                                <span class="text-sm">125</span>
+                            </div>
+                            <div class="flex items-center text-gray-600">
+                                <i class="fas fa-trophy text-purple-500 mr-1"></i>
+                                <span class="text-sm">3/5</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Courses Section -->
+    <section id="courses" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4 text-gray-800">Наши курсы</h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                    Программы для всех классов, разработанные в формате увлекательных квестов и интерактивных заданий
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Course 1 -->
+                <div class="course-card bg-white rounded-xl shadow-md overflow-hidden transition duration-300 border border-gray-100">
+                    <div class="bg-indigo-100 p-6">
+                        <div class="w-16 h-16 rounded-full bg-indigo-600 flex items-center justify-center text-white text-2xl font-bold mb-4">
+                            1-4
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">Начальная школа</h3>
+                        <p class="text-gray-600">Основные предметы в формате сказочных приключений</p>
+                    </div>
+                    <div class="p-6">
+                        <ul class="space-y-2 mb-6">
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                                <span>Интерактивные сказки</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                                <span>Игровые математические задачи</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                                <span>Квесты по окружающему миру</span>
+                            </li>
+                        </ul>
+                        <button onclick="openModal()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-lg font-medium transition duration-300">
+                            Попробовать
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Course 2 -->
+                <div class="course-card bg-white rounded-xl shadow-md overflow-hidden transition duration-300 border border-gray-100">
+                    <div class="bg-purple-100 p-6">
+                        <div class="w-16 h-16 rounded-full bg-purple-600 flex items-center justify-center text-white text-2xl font-bold mb-4">
+                            5-8
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">Средняя школа</h3>
+                        <p class="text-gray-600">Сложные предметы через научные детективы и приключения</p>
+                    </div>
+                    <div class="p-6">
+                        <ul class="space-y-2 mb-6">
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                                <span>Научные детективы</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                                <span>Исторические квесты</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                                <span>Лабораторные работы в игровой форме</span>
+                            </li>
+                        </ul>
+                        <button onclick="openModal()" class="w-full bg-purple-600 hover:bg-purple-700 text-white py-2 rounded-lg font-medium transition duration-300">
+                            Попробовать
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Course 3 -->
+                <div class="course-card bg-white rounded-xl shadow-md overflow-hidden transition duration-300 border border-gray-100">
+                    <div class="bg-blue-100 p-6">
+                        <div class="w-16 h-16 rounded-full bg-blue-600 flex items-center justify-center text-white text-2xl font-bold mb-4">
+                            9-11
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">Старшая школа</h3>
+                        <p class="text-gray-600">Подготовка к экзаменам через стратегии и сложные квесты</p>
+                    </div>
+                    <div class="p-6">
+                        <ul class="space-y-2 mb-6">
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                                <span>Экзаменационные симуляторы</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                                <span>Стратегические задачи</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                                <span>Профориентационные квесты</span>
+                            </li>
+                        </ul>
+                        <button onclick="openModal()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-medium transition duration-300">
+                            Попробовать
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4 text-gray-800">Как это работает?</h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                    Уникальные игровые механики, которые делают обучение увлекательным
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                    <div class="w-14 h-14 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 text-2xl mb-4">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Личный кабинет</h3>
+                    <p class="text-gray-600 mb-4">
+                        Каждый ученик получает доступ к своему прогрессу, уровням и достижениям. 
+                        Система адаптируется под индивидуальный уровень знаний.
+                    </p>
+                    <div class="bg-indigo-50 rounded-lg p-3">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-sm font-medium">Уровень:</span>
+                            <span class="bg-indigo-600 text-white text-xs px-2 py-1 rounded-full">Новичок</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div class="bg-indigo-600 h-2 rounded-full" style="width: 30%"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Feature 2 -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                    <div class="w-14 h-14 rounded-full bg-green-100 flex items-center justify-center text-green-600 text-2xl mb-4">
+                        <i class="fas fa-gamepad"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Игровые механики</h3>
+                    <p class="text-gray-600 mb-4">
+                        Баллы за прохождение заданий, уровни и награды. 
+                        Мини-карты с миссиями помогают визуализировать прогресс.
+                    </p>
+                    <div class="bg-green-50 rounded-lg p-3">
+                        <div class="flex justify-between">
+                            <div class="flex items-center">
+                                <i class="fas fa-coins text-yellow-500 mr-1"></i>
+                                <span class="text-sm font-medium">125</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-star text-blue-500 mr-1"></i>
+                                <span class="text-sm font-medium">3/5</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-medal text-purple-500 mr-1"></i>
+                                <span class="text-sm font-medium">2</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Feature 3 -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                    <div class="w-14 h-14 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-2xl mb-4">
+                        <i class="fas fa-book-open"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Форматы обучения</h3>
+                    <p class="text-gray-600 mb-4">
+                        Текстовые новеллы и квесты, интерактивные видеоуроки, 
+                        практические задания в игровой форме — никаких скучных лекций!
+                    </p>
+                    <div class="bg-blue-50 rounded-lg p-3">
+                        <div class="flex flex-wrap gap-2">
+                            <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">Квесты</span>
+                            <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">Видео</span>
+                            <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">Тесты</span>
+                            <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">Симуляторы</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4 text-gray-800">Частые вопросы</h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                    Ответы на самые популярные вопросы о нашей платформе
+                </p>
+            </div>
+            
+            <div class="max-w-3xl mx-auto space-y-4">
+                <!-- FAQ 1 -->
+                <div class="faq-card bg-gray-50 rounded-lg overflow-hidden border border-gray-200 transition duration-300">
+                    <button onclick="toggleFAQ(1)" class="w-full flex justify-between items-center p-5 focus:outline-none">
+                        <h3 class="text-lg font-medium text-left">Как начать обучение?</h3>
+                        <i class="fas fa-chevron-down text-indigo-600 transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-answer hidden px-5 pb-5">
+                        <p class="text-gray-600">
+                            Просто зарегистрируйтесь на нашей платформе, выберите класс и предмет, который хотите изучать. 
+                            Система автоматически подберет для вас подходящие квесты и задания. 
+                            Вы можете начать с любого раздела, который вам интересен!
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- FAQ 2 -->
+                <div class="faq-card bg-gray-50 rounded-lg overflow-hidden border border-gray-200 transition duration-300">
+                    <button onclick="toggleFAQ(2)" class="w-full flex justify-between items-center p-5 focus:outline-none">
+                        <h3 class="text-lg font-medium text-left">Подходит ли MindGames для моего ребёнка?</h3>
+                        <i class="fas fa-chevron-down text-indigo-600 transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-answer hidden px-5 pb-5">
+                        <p class="text-gray-600">
+                            Наша платформа разработана для детей всех возрастов (1-11 классы) с разным уровнем подготовки. 
+                            Система адаптирует сложность заданий под каждого ученика. 
+                            Если ваш ребёнок любит игры и приключения — ему точно понравится учиться с MindGames!
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- FAQ 3 -->
+                <div class="faq-card bg-gray-50 rounded-lg overflow-hidden border border-gray-200 transition duration-300">
+                    <button onclick="toggleFAQ(3)" class="w-full flex justify-between items-center p-5 focus:outline-none">
+                        <h3 class="text-lg font-medium text-left">Нужно ли устанавливать приложение?</h3>
+                        <i class="fas fa-chevron-down text-indigo-600 transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-answer hidden px-5 pb-5">
+                        <p class="text-gray-600">
+                            Нет, MindGames работает прямо в браузере на любом устройстве — компьютере, планшете или телефоне. 
+                            Вам не нужно ничего скачивать или устанавливать. 
+                            Просто откройте сайт в браузере и начните обучение!
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- FAQ 4 -->
+                <div class="faq-card bg-gray-50 rounded-lg overflow-hidden border border-gray-200 transition duration-300">
+                    <button onclick="toggleFAQ(4)" class="w-full flex justify-between items-center p-5 focus:outline-none">
+                        <h3 class="text-lg font-medium text-left">Есть ли домашние задания?</h3>
+                        <i class="fas fa-chevron-down text-indigo-600 transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-answer hidden px-5 pb-5">
+                        <p class="text-gray-600">
+                            В традиционном понимании — нет. Вместо скучных домашних заданий у нас есть увлекательные квесты и миссии, 
+                            которые можно проходить в любое время. Прогресс сохраняется автоматически, 
+                            так что можно продолжить с того места, где остановился.
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- FAQ 5 -->
+                <div class="faq-card bg-gray-50 rounded-lg overflow-hidden border border-gray-200 transition duration-300">
+                    <button onclick="toggleFAQ(5)" class="w-full flex justify-between items-center p-5 focus:outline-none">
+                        <h3 class="text-lg font-medium text-left">Как отслеживать прогресс ребёнка?</h3>
+                        <i class="fas fa-chevron-down text-indigo-600 transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-answer hidden px-5 pb-5">
+                        <p class="text-gray-600">
+                            Родители получают доступ к специальной панели, где видят весь прогресс ребёнка: 
+                            пройденные темы, набранные баллы, полученные достижения и текущий уровень. 
+                            Вы также будете получать еженедельные отчеты на email.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-16 bg-indigo-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4 text-gray-800">Свяжитесь с нами</h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                    Есть вопросы или предложения? Мы всегда рады помочь!
+                </p>
+            </div>
+            
+            <div class="flex flex-col md:flex-row gap-8 max-w-6xl mx-auto">
+                <div class="md:w-1/2 bg-white p-8 rounded-xl shadow-sm border border-gray-100">
+                    <h3 class="text-xl font-bold mb-6">Наши контакты</h3>
+                    
+                    <div class="space-y-4">
+                        <div class="flex items-start">
+                            <div class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 mr-4">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-medium text-gray-800">Email</h4>
+                                <a href="mailto:hello@mindgames.ru" class="text-indigo-600 hover:underline">hello@mindgames.ru</a>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 mr-4">
+                                <i class="fas fa-phone-alt"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-medium text-gray-800">Телефон</h4>
+                                <a href="tel:+78001234567" class="text-indigo-600 hover:underline">8 (800) 123-45-67</a>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 mr-4">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-medium text-gray-800">Адрес</h4>
+                                <p class="text-gray-600">Москва, ул. Образовательная, 15</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h3 class="text-xl font-bold mt-8 mb-4">Мы в соцсетях</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 rounded-full bg-indigo-100 hover:bg-indigo-200 flex items-center justify-center text-indigo-600 transition duration-300">
+                            <i class="fab fa-vk"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-indigo-100 hover:bg-indigo-200 flex items-center justify-center text-indigo-600 transition duration-300">
+                            <i class="fab fa-telegram"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-indigo-100 hover:bg-indigo-200 flex items-center justify-center text-indigo-600 transition duration-300">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-indigo-100 hover:bg-indigo-200 flex items-center justify-center text-indigo-600 transition duration-300">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="md:w-1/2 bg-white p-8 rounded-xl shadow-sm border border-gray-100">
+                    <h3 class="text-xl font-bold mb-6">Форма обратной связи</h3>
+                    <form class="space-y-4">
+                        <div>
+                            <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Ваше имя</label>
+                            <input type="text" id="name" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                        </div>
+                        
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                            <input type="email" id="email" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                        </div>
+                        
+                        <div>
+                            <label for="message" class="block text-sm font-medium text-gray-700 mb-1">Сообщение</label>
+                            <textarea id="message" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"></textarea>
+                        </div>
+                        
+                        <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg font-bold transition duration-300">
+                            Отправить
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="flex items-center mb-4 md:mb-0">
+                    <div class="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold text-xl mr-2">
+                        MG
+                    </div>
+                    <span class="text-xl font-bold">MindGames</span>
+                </div>
+                
+                <div class="flex flex-wrap justify-center gap-6 mb-6 md:mb-0">
+                    <a href="#about" class="text-gray-300 hover:text-white transition duration-300">О школе</a>
+                    <a href="#courses" class="text-gray-300 hover:text-white transition duration-300">Курсы</a>
+                    <a href="#features" class="text-gray-300 hover:text-white transition duration-300">Возможности</a>
+                    <a href="#faq" class="text-gray-300 hover:text-white transition duration-300">Вопросы</a>
+                    <a href="#contact" class="text-gray-300 hover:text-white transition duration-300">Контакты</a>
+                </div>
+                
+                <button onclick="openModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-full font-medium transition duration-300">
+                    Войти
+                </button>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-400 text-sm mb-4 md:mb-0">
+                    © 2023 MindGames. Все права защищены.
+                </p>
+                
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-white transition duration-300 text-sm">Политика конфиденциальности</a>
+                    <a href="#" class="text-gray-400 hover:text-white transition duration-300 text-sm">Условия использования</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div id="modal" class="modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 opacity-0 invisible transition duration-300">
+        <div class="modal-content bg-white rounded-xl shadow-2xl max-w-md w-full mx-4 overflow-hidden">
+            <div class="flex justify-between items-center border-b border-gray-200 p-4">
+                <h3 class="text-xl font-bold text-gray-800">Вход в MindGames</h3>
+                <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="p-6">
+                <div class="space-y-4">
+                    <div>
+                        <label for="login-email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                        <input type="email" id="login-email" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                    </div>
+                    
+                    <div>
+                        <label for="login-password" class="block text-sm font-medium text-gray-700 mb-1">Пароль</label>
+                        <input type="password" id="login-password" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                    </div>
+                    
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <input type="checkbox" id="remember-me" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+                            <label for="remember-me" class="ml-2 block text-sm text-gray-700">Запомнить меня</label>
+                        </div>
+                        <a href="#" class="text-sm text-indigo-600 hover:underline">Забыли пароль?</a>
+                    </div>
+                    
+                    <button class="w-full bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg font-bold transition duration-300">
+                        Войти
+                    </button>
+                </div>
+                
+                <div class="relative my-6">
+                    <div class="absolute inset-0 flex items-center">
+                        <div class="w-full border-t border-gray-300"></div>
+                    </div>
+                    <div class="relative flex justify-center text-sm">
+                        <span class="px-2 bg-white text-gray-500">Или</span>
+                    </div>
+                </div>
+                
+                <div class="space-y-3">
+                    <button class="w-full flex items-center justify-center px-4 py-2 border border-gray-300 rounded-lg bg-white hover:bg-gray-50 transition duration-300">
+                        <i class="fab fa-google text-red-500 mr-2"></i>
+                        <span>Продолжить с Google</span>
+                    </button>
+                    
+                    <button class="w-full flex items-center justify-center px-4 py-2 border border-gray-300 rounded-lg bg-white hover:bg-gray-50 transition duration-300">
+                        <i class="fab fa-vk text-blue-500 mr-2"></i>
+                        <span>Продолжить с ВКонтакте</span>
+                    </button>
+                </div>
+                
+                <div class="mt-6 text-center">
+                    <p class="text-sm text-gray-600">
+                        Ещё нет аккаунта? 
+                        <a href="#" class="text-indigo-600 font-medium hover:underline">Зарегистрироваться</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        // Modal functions
+        function openModal() {
+            const modal = document.getElementById('modal');
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeModal() {
+            const modal = document.getElementById('modal');
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+        
+        // Close modal when clicking outside
+        document.getElementById('modal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('modal')) {
+                closeModal();
+            }
+        });
+        
+        // FAQ toggle
+        function toggleFAQ(index) {
+            const faqCard = document.querySelectorAll('.faq-card')[index-1];
+            const answer = faqCard.querySelector('.faq-answer');
+            const icon = faqCard.querySelector('button i');
+            
+            faqCard.classList.toggle('active');
+            answer.classList.toggle('hidden');
+            icon.classList.toggle('fa-chevron-down');
+            icon.classList.toggle('fa-chevron-up');
+        }
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Close mobile menu if open
+                    if (!mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
